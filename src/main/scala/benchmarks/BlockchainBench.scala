@@ -1,6 +1,7 @@
 
 package scorex.crypto.authds.benchmarks
 
+/*
 import com.google.common.primitives.Ints
 import org.mapdb.DB.TreeMapMaker
 import org.mapdb.{BTreeMap, DBMaker, Serializer}
@@ -26,6 +27,7 @@ trait BenchmarkCommons {
 
   val perBlock = additionsInBlock + modificationsInBlock
 }
+
 
 trait TwoPartyCommons extends BenchmarkCommons with UpdateF[TreapValue] {
   lazy val db = DBMaker
@@ -363,4 +365,4 @@ object BlockchainBench extends BenchmarkLaunchers with App {
   runBatchProver()
    //runBatchVerifier()
 }
-
+*/

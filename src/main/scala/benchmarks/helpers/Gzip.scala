@@ -1,4 +1,4 @@
-package scorex.crypto.authds.benchmarks
+package benchmarks.helpers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import java.util.zip.{GZIPInputStream, GZIPOutputStream}

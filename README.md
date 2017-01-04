@@ -6,5 +6,7 @@ our hardware in the paper .
 
 ## Benchmarks List
 
-
+* Performance Benchmark
+* Batching Benchmark
+* Blockchain Processing Simulation Benchmark
 

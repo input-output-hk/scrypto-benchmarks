@@ -1,10 +1,11 @@
 package scorex.crypto.authds.benchmarks
 
-import scorex.crypto.authds.TwoPartyTests
+import benchmarks.helpers._
 import scorex.crypto.authds.avltree.batch._
 import scorex.crypto.authds.avltree.legacy.{AVLModifyProof, AVLTree}
 import scorex.utils.Random
 import scorex.crypto.authds.avltree._
+
 import scala.util.Success
 
 /**
@@ -13,10 +14,10 @@ import scala.util.Success
 object BatchingBenchmark extends App with TwoPartyTests {
 
   println ("treeSize, numLookups, proofSizeForEach")
-  benchSizeLookupsInTree(1000000, Seq(1000), false, false)
-  benchSizeLookupsInTree(1000000, Seq(1000), true, false)
-  benchSizeLookupsInTree(1000000, Seq(1000), false, true)
-  benchSizeLookupsInTree(1000000, Seq(1000), true, true)
+  benchSizeLookupsInTree(1000000, Seq(1000), useFreshLookups = false, halfInserts = false)
+  benchSizeLookupsInTree(1000000, Seq(1000), useFreshLookups = true, halfInserts = false)
+  benchSizeLookupsInTree(1000000, Seq(1000), useFreshLookups = false, halfInserts = true)
+  benchSizeLookupsInTree(1000000, Seq(1000), useFreshLookups = true, halfInserts = true)
 
   bench2()
 //  timeBenchmarksNewContinuous

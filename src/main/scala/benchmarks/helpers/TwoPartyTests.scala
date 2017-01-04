@@ -1,8 +1,8 @@
-package scorex.crypto.authds
+package benchmarks.helpers
 
 import com.google.common.primitives.Longs
-import scorex.crypto.TestingCommons
 import scorex.crypto.authds.TwoPartyDictionary.Label
+import scorex.crypto.authds._
 import scorex.crypto.authds.avltree.AVLValue
 import scorex.crypto.authds.legacy.treap.Constants.TreapValue
 import scorex.crypto.hash.Sha256
