@@ -8,4 +8,4 @@ scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 
 libraryDependencies ++= Seq(
     "com.h2database" % "h2-mvstore" % "1.4.193",
-    "org.scorexfoundation" %% "scrypto" % "1.2.0-SNAPSHOT")
+    "org.scorexfoundation" %% "scrypto" % "1.2.0")
