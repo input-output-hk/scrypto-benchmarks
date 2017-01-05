@@ -1,6 +1,6 @@
-package scorex.crypto.authds.benchmarks
+package scorex.crypto.benchmarks
 
-import benchmarks.helpers._
+import scorex.crypto.benchmarks.helpers._
 import scorex.crypto.authds.avltree.batch._
 import scorex.crypto.authds.avltree.legacy.{AVLModifyProof, AVLTree}
 import scorex.utils.Random

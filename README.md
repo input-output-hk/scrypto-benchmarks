@@ -10,3 +10,6 @@ our hardware in the paper .
 * Batching Benchmark
 * Blockchain Processing Simulation Benchmark
 
+
+
+sbt "run-main scorex.crypto.benchmks.PerformanceMeter"

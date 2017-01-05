@@ -1,4 +1,4 @@
-package benchmarks.helpers
+package scorex.crypto.benchmarks.helpers
 
 import java.io.File
 

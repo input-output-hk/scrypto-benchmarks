@@ -1,4 +1,4 @@
-package benchmarks.helpers
+package scorex.crypto.benchmarks.helpers
 
 import scorex.crypto.authds.TwoPartyDictionary.Label
 import scorex.crypto.authds.UpdateF

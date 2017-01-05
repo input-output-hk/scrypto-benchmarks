@@ -1,4 +1,4 @@
-package benchmarks.helpers
+package scorex.crypto.benchmarks.helpers
 
 import com.google.common.primitives.Longs
 import scorex.crypto.authds.TwoPartyDictionary.Label

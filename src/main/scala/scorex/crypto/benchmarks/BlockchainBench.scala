@@ -1,5 +1,5 @@
 
-package scorex.crypto.authds.benchmarks
+package scorex.crypto.benchmarks
 
 import com.google.common.primitives.Ints
 import org.h2.mvstore.MVStore
@@ -352,11 +352,27 @@ trait BenchmarkLaunchers extends BenchmarkCommons {
 
 /**
   * Todo: describe benches
-  * todo: launchers
   */
-object BlockchainBench extends BenchmarkLaunchers with App {
-  // runBatchProver()
-   // runBatchVerifier()
+object RunLegacyProver extends BenchmarkLaunchers with App {
+  runProver()
+}
 
+object RunLegacyVerifier extends BenchmarkLaunchers with App {
+  runVerifier()
+}
+
+object RunBatchProver extends BenchmarkLaunchers with App {
+  runBatchProver()
+}
+
+object RunBatchVerifier extends BenchmarkLaunchers with App {
+  runBatchVerifier()
+}
+
+object RunFullWorker extends BenchmarkLaunchers with App {
   runFullWorker()
 }
+
+
+
+
