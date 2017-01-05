@@ -1,10 +1,8 @@
 
 package scorex.crypto.authds.benchmarks
 
-/*
 import com.google.common.primitives.Ints
-import org.mapdb.DB.TreeMapMaker
-import org.mapdb.{BTreeMap, DBMaker, Serializer}
+import org.h2.mvstore.MVStore
 import scorex.crypto.authds.TwoPartyDictionary.Label
 import scorex.crypto.authds._
 import scorex.crypto.authds.avltree.batch.{BatchAVLProver, BatchAVLVerifier, Insert}
@@ -30,24 +28,24 @@ trait BenchmarkCommons {
 
 
 trait TwoPartyCommons extends BenchmarkCommons with UpdateF[TreapValue] {
-  lazy val db = DBMaker
+  lazy val db = new MVStore.Builder().
+    fileName("/tmp/proofs").
+    cacheSize(1).
+    open()
+
+    /*DBMaker
     .fileDB("/tmp/proofs")
     .closeOnJvmShutdown()
-    .make()
+    .make()*/
 
-  lazy private val proofsMapMaker:TreeMapMaker[Integer, Array[Byte]] =
-    db.treeMap("proofs", Serializer.INTEGER, Serializer.BYTE_ARRAY)
-
-  lazy val proofsMap = proofsMapMaker.createOrOpen().asInstanceOf[BTreeMap[Integer, Array[Byte]]]
+  lazy val proofsMap = db.openMap[Integer, Array[Byte]]("proofs")
 
   def set(value: TreapValue): UpdateFunction = { oldOpt: Option[TreapValue] => Try(Some(oldOpt.getOrElse(value))) }
 
   lazy val balance = Array.fill(8)(0: Byte)
   lazy val bfn = set(balance)
 
-  protected lazy val rootMap = db.treeMap("root", Serializer.STRING, Serializer.BYTE_ARRAY)
-    .createOrOpen()
-    .asInstanceOf[BTreeMap[String, Array[Byte]]]
+  protected lazy val rootMap = db.openMap[String, Array[Byte]]("root")
 
   def setRoot(newVal: Array[Byte]) = rootMap.put("root", newVal)
 
@@ -117,11 +115,7 @@ class Prover extends TwoPartyCommons with Initializing {
 
 
 trait Batching extends TwoPartyCommons {
-  lazy val rootsMap: BTreeMap[Integer, Array[Byte]] = db.treeMap("roots")
-    .keySerializer(Serializer.INTEGER)
-    .valueSerializer(Serializer.BYTE_ARRAY)
-    .createOrOpen()
-    .asInstanceOf[BTreeMap[Integer, Array[Byte]]]
+  lazy val rootsMap = db.openMap[Int, Array[Byte]]("roots")
 }
 
 
@@ -229,13 +223,9 @@ class BatchVerifier extends TwoPartyCommons with Batching with Initializing {
 }
 
 class FullWorker extends BenchmarkCommons with Initializing {
-  val store = DBMaker.fileDB("/tmp/fulldb").make()
+  val store = MVStore.open("/tmp/fulldb")
 
-  val map: BTreeMap[Array[Byte], Integer] = store.treeMap("proofs")
-    .keySerializer(Serializer.BYTE_ARRAY)
-    .valueSerializer(Serializer.INTEGER)
-    .createOrOpen()
-    .asInstanceOf[BTreeMap[Array[Byte], Integer]]
+  val map = store.openMap[Array[Byte], Int]("proofs")
 
 
   override protected def initStep(i: Int) = {
@@ -360,9 +350,13 @@ trait BenchmarkLaunchers extends BenchmarkCommons {
   }
 }
 
-
+/**
+  * Todo: describe benches
+  * todo: launchers
+  */
 object BlockchainBench extends BenchmarkLaunchers with App {
-  runBatchProver()
-   //runBatchVerifier()
+  // runBatchProver()
+   // runBatchVerifier()
+
+  runFullWorker()
 }
-*/
