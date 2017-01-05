@@ -5,7 +5,9 @@ import scorex.crypto.authds.avltree.legacy.AVLTree
 import scorex.crypto.authds.legacy.treap._
 import scorex.crypto.hash.Blake2b256Unsafe
 
-
+/**
+  * The benchmark compares proof generation/verification speed and size for authenticated AVL+ trees and treaps.
+  */
 object PerformanceMeter extends App with TwoPartyTests {
 
   val Step = 1000
