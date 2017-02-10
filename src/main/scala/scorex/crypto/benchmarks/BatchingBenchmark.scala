@@ -103,7 +103,7 @@ object BatchingBenchmark extends App with TwoPartyTests {
     for (iteration <- 0 until(totalSize, step)) {
 
       val converted = Modification.convert(mods.slice(i + iteration, i + iteration + step))
-      var digest = oldProver.rootHash
+      val digest = oldProver.rootHash
 
 
       val (oldProverTimeT, oldProofs: Seq[AVLModifyProof]) = time {

@@ -16,7 +16,7 @@ import scala.util.{Random, Try}
 trait BenchmarkCommons {
   val hf = new Blake2b256Unsafe()
 
-  val initElements = 5000000
+  val initialSize = 5000000
 
   val blocks = 90000
 
@@ -32,11 +32,6 @@ trait TwoPartyCommons extends BenchmarkCommons with UpdateF[TreapValue] {
     fileName("/tmp/proofs").
     cacheSize(1).
     open()
-
-    /*DBMaker
-    .fileDB("/tmp/proofs")
-    .closeOnJvmShutdown()
-    .make()*/
 
   lazy val proofsMap = db.openMap[Integer, Array[Byte]]("proofs")
 
@@ -62,8 +57,8 @@ trait Initializing extends BenchmarkCommons {
   protected var keyCache: mutable.Buffer[hf.Digest] = mutable.Buffer()
 
   def init(): Unit = {
-    (0 until initElements - keyCacheSize).foreach(initStep)
-    keyCache.appendAll(((initElements - keyCacheSize) until initElements).map(initStep))
+    (0 until initialSize - keyCacheSize).foreach(initStep)
+    keyCache.appendAll(((initialSize - keyCacheSize) until initialSize).map(initStep))
     afterInit()
   }
 }
@@ -79,7 +74,6 @@ class Prover extends TwoPartyCommons with Initializing {
   }
 
   override protected def afterInit(): Unit = {
-    //val rootVar = db.atomicVar("root", Serializer.BYTE_ARRAY).createOrOpen()
     setRoot(treeRoot)
     db.commit()
   }
@@ -102,7 +96,7 @@ class Prover extends TwoPartyCommons with Initializing {
 
   //proofs generation
   def dumpProofs(blockNum: Int, proofs: Seq[AVLModifyProof]): Unit = {
-    var idx = initElements + perBlock * blockNum
+    var idx = initialSize + perBlock * blockNum
     proofs.foreach { proof =>
       proofsMap.put(idx, proof.bytes)
       idx = idx + 1
@@ -174,7 +168,7 @@ class Verifier extends TwoPartyCommons {
   lazy val initRoot = getRoot()
 
   def loadProofs(blockNum: Int): Seq[AVLModifyProof] = {
-    (initElements + perBlock * blockNum) until (initElements + perBlock * (blockNum + 1)) map { idx =>
+    (initialSize + perBlock * blockNum) until (initialSize + perBlock * (blockNum + 1)) map { idx =>
       AVLModifyProof.parseBytes(proofsMap.get(idx)).get
     }
   }
@@ -301,12 +295,18 @@ trait BenchmarkLaunchers extends BenchmarkCommons {
       val sf = System.currentTimeMillis()
       val dsf = sf - sf0
       p.dumpProofs(blockNum, proofs, root, modKeys)
-      println(s"block #$blockNum, prover: $dsf")
+      println(s"block #$blockNum, " +
+        s"prover time: $dsf, " +
+        s"state size before: ${initialSize + (blockNum - 1)*additionsInBlock}, " +
+        s"state size after: ${initialSize + blockNum * additionsInBlock} " +
+        s"proofs size: ${proofs.size}"
+      )
 
+        /* todo: is regular GC needed?
       if (blockNum % 5000 == 4999) {
         System.gc()
         Thread.sleep(60000)
-      }
+      }*/
     }
     p.close()
   }
