@@ -302,11 +302,11 @@ trait BenchmarkLaunchers extends BenchmarkCommons {
         s"proofs size: ${proofs.size}"
       )
 
-        /* todo: is regular GC needed?
+      // todo: is regular GC needed?
       if (blockNum % 5000 == 4999) {
         System.gc()
         Thread.sleep(60000)
-      }*/
+      }
     }
     p.close()
   }
