@@ -4,7 +4,6 @@ import org.h2.mvstore.MVStore
 import scorex.crypto.authds.avltree._
 import scorex.crypto.authds.avltree.batch.Modification._
 import scorex.crypto.authds.avltree.batch.{BatchAVLProver, BatchAVLVerifier, Insert}
-import scorex.crypto.encode.Base58
 import scorex.crypto.hash.Blake2b256Unsafe
 
 import scala.collection.mutable
@@ -15,7 +14,7 @@ object PosBenchmark extends App {
 
   implicit val hf = new Blake2b256Unsafe()
 
-  val InitSize = 600000
+  val InitSize = 46000000
   val AdditionsPerBlock = 230000
   val Blocks = 200
 
@@ -116,5 +115,14 @@ object PosBenchmark extends App {
     }
   }
 
+  runFull()
+
+  println("=====================Full Validation Experiment Finished======================")
+  System.gc()
+  Thread.sleep(180000)
+  println()
+  println
+
   runLight()
+  println("=====================Light Validation Experiment Finished======================")
 }
