@@ -15,7 +15,7 @@ object PosBenchmark extends App {
 
   implicit val hf = new Blake2b256Unsafe()
 
-  val InitSize = 46000000
+  val InitSize = 600000
   val AdditionsPerBlock = 230000
   val Blocks = 200
 
@@ -86,12 +86,12 @@ object PosBenchmark extends App {
     (1 to Blocks) foreach { block =>
 
       val rh = prover.rootHash
-      println(s"rh: ${Base58.encode(rh)}")
+       // println(s"rh: ${Base58.encode(rh)}")
 
-      val time = genKeys.foldLeft(0L){case (t, gk) =>
+      val (atime, asize) = genKeys.foldLeft(0L -> 0){case ((t, ps), gk) =>
         prover.performOneModification(gk, (k => Success(k)): UpdateFunction)
         val gp = prover.generateProof
-        println(s"ph: ${Base58.encode(prover.rootHash)}")
+        // println(s"ph: ${Base58.encode(prover.rootHash)}")
 
         val verifier = new BatchAVLVerifier(rh, gp)
 
@@ -99,11 +99,13 @@ object PosBenchmark extends App {
         verifier.performOneModification(gk, (k => Success(k)): UpdateFunction).get
         val endTime = System.currentTimeMillis()
 
-        t + (endTime - startTime)
-      } / genKeys.size.toFloat
+        (t + (endTime - startTime),  ps + gp.length)
+      }
 
+      val time = atime / genKeys.size.toFloat
+      val sz = asize / genKeys.size.toFloat
 
-      println(s"Block: $block, time: $time")
+      println(s"Block: $block, time: $time, proofsize: $sz")
 
       (0 until AdditionsPerBlock).foreach { p =>
         val k = genKey(block, p)

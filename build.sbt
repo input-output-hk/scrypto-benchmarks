@@ -13,4 +13,4 @@ libraryDependencies ++= Seq(
 fork := true
 
 javaOptions in run ++= Seq(
-    "-Xms4G", "-Xmx60G", "-XX:MaxPermSize=1024M", "-XX:+UseConcMarkSweepGC")
+    "-Xms4G", "-Xmx50G", "-XX:MaxPermSize=1024M", "-XX:+UseConcMarkSweepGC")
